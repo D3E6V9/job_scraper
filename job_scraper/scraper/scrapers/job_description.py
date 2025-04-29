@@ -6,6 +6,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from django.conf import settings
 import google.generativeai as genai
+from .query_search import get_with_retry
 
 from .job_data import JobData
 
