@@ -1,0 +1,41 @@
+{% extends 'web/base.html' %}
+
+{% block title %}Search - Jobs Web Scraper{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Search Jobs</h3>
+            </div>
+            <div class="card-body">
+                <form action="{% url 'web:job_list' %}" method="get">
+                    <div class="mb-3">
+                        <label for="search-query" class="form-label">Search by job title, company, or location:</label>
+                        <input type="text" class="form-control form-control-lg" id="search-query" name="q" placeholder="e.g., software developer, manager, sales..." required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header bg-info text-dark">
+                <h5 class="mb-0">Search Tips</h5>
+            </div>
+            <div class="card-body">
+                <ul class="mb-0">
+                    <li>Use specific job titles like "Software Developer" or "Marketing Manager"</li>
+                    <li>Include company names to narrow down your search</li>
+                    <li>Add location names to find jobs in specific areas</li>
+                    <li>Try both complete job titles and keywords related to skills</li>
+                    <li>Don't use too many words in your search - keep it simple</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

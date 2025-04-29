@@ -1,0 +1,26 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env
+
+# Django
+*.log
+db.sqlite3
+media/
+
+# Distribution / packaging
+.dist/
+dist/
+build/
+
+# Environment specific
+.env
+.vscode/
+.idea/
+
+# OS specific
+.DS_Store

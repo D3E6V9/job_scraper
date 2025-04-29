@@ -1,0 +1,44 @@
+{% extends 'web/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Custom Search - Jobs Web Scraper{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0">Custom Search Scraper</h3>
+            </div>
+            <div class="card-body">
+                <p class="lead">Enter a job title or keyword to scrape from all supported job portals:</p>
+                
+                <form method="post" action="{% url 'scraper:run_custom_scraper' %}">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-success btn-lg">Start Scraping</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">Important Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Please Note:</strong></p>
+                <ul class="mb-0">
+                    <li>The scraping process runs in the background and may take several minutes to complete</li>
+                    <li>You can continue using the website while scraping is in progress</li>
+                    <li>The status of the scraper will be shown on the home page</li>
+                    <li>Once complete, the new job data will be available in the job listings</li>
+                    <li>The scraper runs for approximately one hour, after which it will stop automatically</li>
+                    <li>Please be patient and avoid starting multiple scraping tasks simultaneously</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

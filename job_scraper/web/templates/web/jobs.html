@@ -1,0 +1,141 @@
+{% extends 'web/base.html' %}
+
+{% block title %}Jobs - Jobs Web Scraper{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Browse Jobs</h1>
+            <a href="{% url 'scraper:export_data' %}" class="btn btn-success">Export to Excel</a>
+        </div>
+        
+        {% if query %}
+            <div class="alert alert-info">
+                Showing results for: <strong>{{ query }}</strong>
+                <a href="{% url 'web:job_list' %}" class="float-end">Clear search</a>
+            </div>
+        {% endif %}
+        
+        {% if page_obj %}
+            <div class="row">
+                {% for job in page_obj %}
+                    <div class="col-md-6">
+                        <div class="card job-card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ job.jobTitle }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ job.company|default:"Company not specified" }}</h6>
+                                
+                                <div class="mb-2">
+                                    {% if job.jobLocation %}
+                                        <span class="badge bg-secondary me-2">{{ job.jobLocation }}</span>
+                                    {% endif %}
+                                    
+                                    {% if job.jobType %}
+                                        <span class="badge bg-info text-dark me-2">{{ job.jobType }}</span>
+                                    {% endif %}
+                                    
+                                    {% if job.salary %}
+                                        <span class="badge bg-success me-2">{{ job.salary }}</span>
+                                    {% endif %}
+                                </div>
+                                
+                                <p class="card-text small">
+                                    {% if job.jobCategory %}
+                                        Category: {{ job.jobCategory }}<br>
+                                    {% endif %}
+                                    
+                                    {% if job.experience %}
+                                        Experience: {{ job.experience }}<br>
+                                    {% endif %}
+                                    
+                                    {% if job.datePosted %}
+                                        Posted: {{ job.datePosted|date:"F j, Y" }}
+                                    {% endif %}
+                                </p>
+                                
+                                <div class="d-grid">
+                                    <a href="{% url 'web:job_detail' job.id %}" class="btn btn-outline-primary btn-sm">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Pagination -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if query %}&q={{ query }}{% endif %}" aria-label="First">
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" aria-label="First">
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}" aria-label="Last">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" aria-label="Last">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% else %}
+            <div class="alert alert-warning">
+                <h4 class="alert-heading">No jobs found!</h4>
+                <p>There are no jobs matching your search criteria. Try different keywords or run the scraper to collect job data.</p>
+                <hr>
+                <p class="mb-0">
+                    <a href="{% url 'scraper:run_scraper' %}" class="btn btn-primary me-2">Run Predefined Scraper</a>
+                    <a href="{% url 'web:custom_search' %}" class="btn btn-outline-primary">Run Custom Scraper</a>
+                </p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

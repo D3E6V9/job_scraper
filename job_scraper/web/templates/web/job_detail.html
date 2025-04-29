@@ -1,0 +1,127 @@
+{% extends 'web/base.html' %}
+
+{% block title %}{{ job.jobTitle }} - Jobs Web Scraper{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">{{ job.jobTitle }}</h3>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <h5>Company Information</h5>
+                    <p class="mb-2"><strong>Company:</strong> {{ job.company|default:"Not specified" }}</p>
+                    {% if job.jobLocation %}
+                        <p class="mb-2"><strong>Location:</strong> {{ job.jobLocation }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-4">
+                    <h5>Job Details</h5>
+                    {% if job.jobType %}
+                        <p class="mb-2"><strong>Job Type:</strong> {{ job.jobType }}</p>
+                    {% endif %}
+                    {% if job.jobCategory %}
+                        <p class="mb-2"><strong>Category:</strong> {{ job.jobCategory }}</p>
+                    {% endif %}
+                    {% if job.jobIndustry %}
+                        <p class="mb-2"><strong>Industry:</strong> {{ job.jobIndustry }}</p>
+                    {% endif %}
+                    {% if job.salary %}
+                        <p class="mb-2"><strong>Salary:</strong> {{ job.salary }}</p>
+                    {% endif %}
+                    {% if job.deadline %}
+                        <p class="mb-2"><strong>Application Deadline:</strong> {{ job.deadline }}</p>
+                    {% endif %}
+                    {% if job.datePosted %}
+                        <p class="mb-2"><strong>Date Posted:</strong> {{ job.datePosted|date:"F j, Y" }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-4">
+                    <h5>Requirements</h5>
+                    {% if job.education %}
+                        <p class="mb-2"><strong>Education:</strong> {{ job.education }}</p>
+                    {% endif %}
+                    {% if job.experience %}
+                        <p class="mb-2"><strong>Experience:</strong> {{ job.experience }}</p>
+                    {% endif %}
+                    
+                    {% if skills %}
+                        <p class="mb-2"><strong>Skills:</strong></p>
+                        <div class="mb-3">
+                            {% for skill in skills %}
+                                <span class="badge bg-info text-dark skill-badge">{{ skill }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                {% if benefits %}
+                    <div class="mb-4">
+                        <h5>Benefits</h5>
+                        <ul>
+                            {% for benefit in benefits %}
+                                <li>{{ benefit }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                
+                <div class="d-grid gap-2">
+                    <a href="{{ job.link }}" class="btn btn-primary" target="_blank">Apply Now</a>
+                    <a href="{% url 'web:job_list' %}" class="btn btn-outline-secondary">Back to Job List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-info text-dark">
+                <h5 class="mb-0">Similar Jobs</h5>
+            </div>
+            <div class="card-body">
+                <!-- Get similar jobs by category or skills -->
+                {% with similar_jobs=job.get_similar_jobs|slice:":5" %}
+                    {% if similar_jobs %}
+                        <div class="list-group">
+                            {% for similar_job in similar_jobs %}
+                                <a href="{% url 'web:job_detail' similar_job.id %}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">{{ similar_job.jobTitle }}</h6>
+                                    </div>
+                                    <p class="mb-1">{{ similar_job.company|default:"" }}</p>
+                                    <small>{{ similar_job.datePosted|date:"F j, Y" }}</small>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No similar jobs found.</p>
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Job Source</h5>
+            </div>
+            <div class="card-body">
+                <p class="mb-2">This job was scraped from:</p>
+                {% with domain=job.get_domain %}
+                    {% if domain %}
+                        <a href="{{ domain }}" target="_blank" class="btn btn-outline-secondary btn-sm d-block">{{ domain }}</a>
+                    {% else %}
+                        <a href="{{ job.link }}" target="_blank" class="btn btn-outline-secondary btn-sm d-block">Original Source</a>
+                    {% endif %}
+                {% endwith %}
+                
+                <p class="mt-3 mb-2 small text-muted">Scraped on: {{ job.entered_at|date:"F j, Y, g:i a" }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

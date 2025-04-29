@@ -1,0 +1,12 @@
+domain_link,domian_search_link,domain_job_link_path_from_search,domain_keywords,domain_job_description_tags,domain_pagination
+https://merojob.com,https://merojob.com/search/?q={searchTerm},div.card-body h1.h3 a,.q-field,div.card-body div.mb-1 p,yes
+https://www.kumarijob.com,https://www.kumarijob.com/search?q={searchTerm},div.job-card h3 a,.job-search-input,div.job-description,yes
+https://kantipurjob.com,https://kantipurjob.com/search?term={searchTerm},div.job-list-item h2 a,.search-box,div.job-detail-content,yes
+https://www.merorojgari.com,https://www.merorojgari.com/job-search?q={searchTerm},div.job-item h3 a,.form-control,div.job-description-section,yes
+https://rollingnexus.com,https://rollingnexus.com/jobs?search={searchTerm},div.jobs-listing a.job-title,input[name='q'],div.job-content,yes
+https://ph.jobstreet.com,https://ph.jobstreet.com/jobs?q={searchTerm},div[data-automation='job-card'] a,input[data-automation='search-input'],div[data-automation='job-details-description'],yes
+https://www.kalibrr.com,https://www.kalibrr.com/job-board/?q={searchTerm},div.job-card a.job-link,.search-input,div.job-description,yes
+https://www.onlinejobs.ph,https://www.onlinejobs.ph/jobseekers/jobsearch/{searchTerm},div.job-list h4 a,.search-input,div.job-details,yes
+https://www.workabroad.ph,https://www.workabroad.ph/search-results?q={searchTerm},div.job-item h2 a,.search-box,div.job-description-container,yes
+https://my.jobstreet.com,https://my.jobstreet.com/jobs?q={searchTerm},div[data-automation='job-card'] a,input[data-automation='search-input'],div[data-automation='job-details-description'],yes
+https://id.jobstreet.com,https://id.jobstreet.com/jobs?q={searchTerm},div[data-automation='job-card'] a,input[data-automation='search-input'],div[data-automation='job-details-description'],yes

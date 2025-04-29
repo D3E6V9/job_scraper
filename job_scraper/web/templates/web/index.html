@@ -1,0 +1,173 @@
+{% extends 'web/base.html' %}
+
+{% block title %}Home - Jobs Web Scraper{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h1 class="card-title">Welcome to Jobs Web Scraper</h1>
+                <p class="card-text lead">A tool for extracting job data from popular job portals in Nepal, Philippines, Malaysia, and Indonesia.</p>
+                
+                <p>This web scraper is designed to:</p>
+                <ul>
+                    <li>Extract specific data from predefined websites</li>
+                    <li>Store collected data in a structured format</li>
+                    <li>Allow easy search and retrieval of job information</li>
+                    <li>Support exporting data to Excel format</li>
+                </ul>
+                
+                <div class="mt-4">
+                    <a href="{% url 'web:job_list' %}" class="btn btn-primary me-2">Browse Jobs</a>
+                    <a href="{% url 'web:custom_search' %}" class="btn btn-outline-primary">Custom Search</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Latest Jobs</h5>
+            </div>
+            <div class="card-body">
+                {% if latest_jobs %}
+                    <div class="row">
+                        {% for job in latest_jobs %}
+                            <div class="col-md-6">
+                                <div class="card job-card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ job.jobTitle }}</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">{{ job.company|default:"Company not specified" }}</h6>
+                                        <p class="card-text">
+                                            <i class="bi bi-geo-alt"></i> {{ job.jobLocation|default:"Location not specified" }}<br>
+                                            <i class="bi bi-briefcase"></i> {{ job.jobType|default:"Job type not specified" }}
+                                        </p>
+                                        <a href="{% url 'web:job_detail' job.id %}" class="btn btn-sm btn-outline-primary">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="{% url 'web:job_list' %}" class="btn btn-outline-primary">View All Jobs</a>
+                    </div>
+                {% else %}
+                    <p class="text-center">No jobs available yet. Start scraping to collect job data.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'scraper:run_scraper' %}" class="btn btn-success">Run Predefined Scraper</a>
+                    <a href="{% url 'web:custom_search' %}" class="btn btn-outline-success">Run Custom Scraper</a>
+                    <a href="{% url 'scraper:export_data' %}" class="btn btn-outline-success">Export Data to Excel</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Statistics</h5>
+            </div>
+            <div class="card-body">
+                <p class="mb-2">Total Jobs: <strong>{{ total_jobs }}</strong></p>
+                <p class="mb-0">Last Updated: <strong>{% now "F j, Y, g:i a" %}</strong></p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Supported Job Portals</h5>
+            </div>
+            <div class="card-body">
+                <p class="fw-bold">Nepal:</p>
+                <ul class="mb-3">
+                    <li>merojob.com</li>
+                    <li>kumarijob.com</li>
+                    <li>kantipurjob.com</li>
+                    <li>merorojgari.com</li>
+                    <li>rollingnexus.com</li>
+                </ul>
+                
+                <p class="fw-bold">Philippines:</p>
+                <ul class="mb-3">
+                    <li>ph.jobstreet.com</li>
+                    <li>kalibrr.com</li>
+                    <li>onlinejobs.ph</li>
+                    <li>workabroad.ph</li>
+                </ul>
+                
+                <p class="fw-bold">Malaysia:</p>
+                <ul class="mb-3">
+                    <li>my.jobstreet.com</li>
+                </ul>
+                
+                <p class="fw-bold">Indonesia:</p>
+                <ul class="mb-0">
+                    <li>id.jobstreet.com</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Check scraper status if it's running
+    function checkScraperStatus() {
+        fetch('{% url "scraper:scraper_status" %}')
+            .then(response => response.json())
+            .then(data => {
+                if (data.running) {
+                    // Create status alert if it doesn't exist
+                    let statusAlert = document.getElementById('scraper-status');
+                    if (!statusAlert) {
+                        statusAlert = document.createElement('div');
+                        statusAlert.id = 'scraper-status';
+                        statusAlert.className = 'alert alert-info';
+                        statusAlert.role = 'alert';
+                        document.querySelector('main.container').prepend(statusAlert);
+                    }
+                    
+                    // Update status message
+                    statusAlert.innerHTML = `
+                        <h4 class="alert-heading">Scraper Running</h4>
+                        <p>Currently scraping: ${data.current_job || 'Jobs'}</p>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                 role="progressbar" 
+                                 style="width: ${data.percentage}%" 
+                                 aria-valuenow="${data.percentage}" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="100">
+                                ${data.percentage}%
+                            </div>
+                        </div>
+                        <p class="mb-0 mt-2">Progress: ${data.progress} of ${data.total}</p>
+                    `;
+                    
+                    // Check again after 2 seconds
+                    setTimeout(checkScraperStatus, 2000);
+                } else {
+                    // Remove status alert if scraper is not running
+                    const statusAlert = document.getElementById('scraper-status');
+                    if (statusAlert) {
+                        statusAlert.remove();
+                    }
+                }
+            })
+            .catch(error => console.error('Error checking scraper status:', error));
+    }
+    
+    // Check status on page load
+    document.addEventListener('DOMContentLoaded', checkScraperStatus);
+</script>
+{% endblock %}

@@ -1,0 +1,50 @@
+{
+  "Nepal": [
+    "Kathmandu",
+    "Pokhara",
+    "Lalitpur",
+    "Bhaktapur",
+    "Biratnagar",
+    "Birgunj",
+    "Dharan",
+    "Nepalgunj",
+    "Butwal",
+    "Hetauda"
+  ],
+  "Philippines": [
+    "Manila",
+    "Quezon City",
+    "Davao City",
+    "Caloocan",
+    "Cebu City",
+    "Zamboanga City",
+    "Taguig",
+    "Pasig",
+    "Cagayan de Oro",
+    "Parañaque"
+  ],
+  "Malaysia": [
+    "Kuala Lumpur",
+    "Johor Bahru",
+    "Penang",
+    "Petaling Jaya",
+    "Shah Alam",
+    "Melaka",
+    "Kota Kinabalu",
+    "Ipoh",
+    "Kuching",
+    "Subang Jaya"
+  ],
+  "Indonesia": [
+    "Jakarta",
+    "Surabaya",
+    "Bandung",
+    "Medan",
+    "Semarang",
+    "Makassar",
+    "Palembang",
+    "Tangerang",
+    "Depok",
+    "Bekasi"
+  ]
+}
