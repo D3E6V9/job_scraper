@@ -1,4 +1,6 @@
-Django==5.0.7 
-requests==2.31.0 
-beautifulsoup4==4.12.2 
-google-generativeai==0.4.0 
+Django==5.0.7
+requests==2.31.0
+beautifulsoup4==4.12.2
+google-generativeai==0.4.0
+lxml==4.9.3  # Better HTML parsing
+python-dateutil==2.8.2  # For date parsing

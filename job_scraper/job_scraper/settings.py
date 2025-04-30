@@ -24,7 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'scraper',
     'web',
-    'crispy_forms',  # Make sure this is here
+   
 ]
 
 MIDDLEWARE = [
@@ -97,11 +97,10 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Gemini API Key (you'll need to set this)
-GEMINI_API_KEY = 'your-gemini-api-key-here'
+GEMINI_API_KEY = 'AIzaSyAF4aPqMkwJvkIPRvJ-etwN7gBEuPjVFLU'
 
 # Files directory for CSV and other data
 FILES_DIR = os.path.join(BASE_DIR, 'files')
-# Crispy Forms settings
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 # This will point to C:\Users\HP\Desktop\job_scraper\job_scraper\files
 CSV_FILE_DIR = os.path.join(BASE_DIR, 'files')

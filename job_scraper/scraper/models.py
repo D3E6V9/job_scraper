@@ -67,3 +67,26 @@ class JobData(models.Model):
         ordering = ['-datePosted']
         verbose_name = 'Job Data'
         verbose_name_plural = 'Job Data'
+
+# ADD this new model after the existing models in scraper/models.py
+
+class ScrapedHTML(models.Model):
+    url = models.URLField(unique=True)
+    html_content = models.TextField()
+    scraped_at = models.DateTimeField(auto_now_add=True)
+    last_processed = models.DateTimeField(null=True, blank=True)
+    processing_success = models.BooleanField(default=False)
+    source_domain = models.CharField(max_length=255)
+    
+    def __str__(self):
+        return f"HTML for {self.url} ({self.scraped_at.strftime('%Y-%m-%d')})"
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['url']),
+            models.Index(fields=['scraped_at']),
+            models.Index(fields=['processing_success']),
+        ]
+        verbose_name = "Scraped HTML"
+        verbose_name_plural = "Scraped HTMLs"
+
